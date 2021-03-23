@@ -13,13 +13,15 @@
         label="数量"
       ></el-table-column>
       <el-table-column label="操作">
-        <template>
-          <el-button size="mini">删除</el-button>
+        <template v-slot="scope">
+          <el-button size="mini" @click="deleteFromCart(scope.row.id)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
     <div>
-      <p>共 0 件商品 共计¥0</p>
+      <p>共 {{ totalCount }} 件商品 共计¥{{ totalPrice }}</p>
       <el-button
         size="mini"
         type="danger"
@@ -27,18 +29,22 @@
         >去购物车</el-button
       >
     </div>
-    <el-badge :value="5" class="item" slot="reference">
+    <el-badge :value="totalCount" class="item" slot="reference">
       <el-button type="primary">我的购物车</el-button>
     </el-badge>
   </el-popover>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapState, mapMutations } from 'vuex'
 export default {
   name: 'PopCart',
   computed: {
-    ...mapState('cart', ['cartProducts'])
+    ...mapState('cart', ['cartProducts']),
+    ...mapGetters('cart', ['totalCount', 'totalPrice'])
+  },
+  methods: {
+    ...mapMutations('cart', ['deleteFromCart'])
   }
 }
 </script>
